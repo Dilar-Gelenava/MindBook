@@ -24,6 +24,7 @@ class CreateUserDataTable extends Migration
             $table->integer('followers')->default(0);
             $table->integer('following')->default(0);
             $table->text('profile_picture_url')->nullable();
+            $table->timestamps();
         });
     }
 

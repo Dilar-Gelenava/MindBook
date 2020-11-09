@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\UserData;
 use Illuminate\Http\Request;
 use App\Posts;
 use App\Comments;
@@ -26,32 +28,30 @@ class HomeController extends Controller
      */
     public function index()
     {
-//        $posts = Posts::all()->sortByDesc('id');
-//        return view("home", [
-//            'posts' => $posts,
-//        ]);
-//        $posts = DB::table('posts')->get();
-
-
-
         $posts = Posts::all()->sortByDesc('id');
+
         foreach ($posts as $post) {
-            $comments = DB::table('comments')
-                ->where('post_id', '=', $post->id)->get();
+            $comments = collect(DB::table('comments')
+                ->where('post_id', '=', $post->id)->get())->sortByDesc('id');
             $user_name = DB::table('users')
                 ->where('id', '=', $post->user_id)
                 ->select('name')
                 ->get();
+
+            foreach ($comments as $comment) {
+                $user = User::where('id', $comment->user_id)->get()[0];
+                $comment->user_name = $user->name;
+                $comment->user_id = $user->id;
+            }
+
             $post->comments = $comments;
             $post->user_name = $user_name[0]->name;
-
         }
+
         return view("home", [
+
             'posts' => $posts,
         ]);
-
-//        return (array)$user_name[0]->name;
-//        return $posts;
 
     }
 }

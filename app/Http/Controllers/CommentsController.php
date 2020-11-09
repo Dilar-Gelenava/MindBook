@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Comments;
+use App\Posts;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CommentsController extends Controller
 {
@@ -30,8 +34,8 @@ class CommentsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store_comment(Request $request)
     {
@@ -68,7 +72,7 @@ class CommentsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -80,11 +84,14 @@ class CommentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy_comment(Request $request)
     {
-        //
+        $comment_id = $request->input("commentId");
+        Comments::where("id", $comment_id)->delete();
+
+        return redirect()->back();
     }
 }

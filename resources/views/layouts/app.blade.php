@@ -15,7 +15,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
@@ -29,6 +29,7 @@
         p, a, h1, h2, h3, h4, h5, h6 {
             color: white;
         }
+
         .links > a {
             color: #c8c8c8;
             padding: 0 25px;
@@ -40,7 +41,7 @@
         }
         body {
             background: url(
-            https://i.pinimg.com/originals/ad/47/af/ad47af29ad50df1477b9413f9d521db0.jpg
+            https://wallpapercave.com/wp/wp5849659.png
             ) no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
@@ -68,7 +69,7 @@
                         <a class="navbar-brand" href="{{ url('/home') }}"> Home </a>
                     </li>
                     <li class="nav-item">
-                        <a class="navbar-brand" href="{{ url('/myprofile') }}"> My Profile </a>
+                        <a class="navbar-brand" href="/{{ Auth::user()->id.'/'.Auth::user()->name }}"> My Profile </a>
                     </li>
                 </ul>
                 @endauth
@@ -84,7 +85,9 @@
                             </li>
                         @endif
                     @else
-                        <img height="50px" width="50px" style="border-radius: 50px;" src="https://scontent.ftbs5-1.fna.fbcdn.net/v/t1.0-1/cp0/p50x50/122174109_178370813883145_8887753915068651092_o.jpg?_nc_cat=100&ccb=2&_nc_sid=7206a8&_nc_eui2=AeGzlaDhSvFVIO9KZtubzbm9osEa2p_GR3CiwRran8ZHcJFM8at-bl95foCEZ7zXtO5jynqKHjsLKngQA5b4BXLP&_nc_ohc=WrtwhjjXR24AX9PAyd2&_nc_ht=scontent.ftbs5-1.fna&tp=27&oh=bcc579be82fe0cefd4a22806cf6744b8&oe=5FC8C2B6">
+                        <img style="height: 50px; width: 50px; border-radius: 50%; object-fit: cover;"
+                             src="/storage/profile_pictures/{{ Auth::user()->id }}.jpg" onerror="this.onerror=null; this.src='../storage/profile_pictures/blank.png'">
+
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }} <span class="caret"></span>
