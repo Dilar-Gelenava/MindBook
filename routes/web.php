@@ -38,3 +38,7 @@ Route::get('{userId}/{userName}', 'ProfileController@index')->name('showProfile'
 Route::post('/store/user/data', 'ProfileController@store_user_data')->name('storeUserData');
 
 Route::post('/store/comment', 'CommentsController@store_comment')->name('storeComment');
+
+Route::post('/like', 'LikesController@store_like')->name('like');
+
+Route::post('/follow', 'FollowersController@follow')->name('follow');

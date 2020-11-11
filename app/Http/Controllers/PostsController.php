@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comments;
+use App\Likes;
 use App\Posts;
 use App\User;
 use App\UserData;
@@ -22,6 +23,7 @@ class PostsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $userId
      * @return Application|Factory|Response|View
      */
     public function index($userId)
@@ -42,7 +44,8 @@ class PostsController extends Controller
                 $comment->user_name = $user->name;
                 $comment->user_id = $user->id;
             }
-
+            $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
+            $post->liked_users = $liked_users;
             $post->comments = $comments;
             $post->user_name = $user_name[0]->name;
         }
@@ -75,7 +78,7 @@ class PostsController extends Controller
         {
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
-            $image_name = time().'.'.$extension;
+            $image_name = auth()->user()->id.'-'.time().'.'.$extension;
             $image->storeAs('public/post_images', $image_name);
             $image_url = "storage/post_images/".$image_name;
         } else {
@@ -111,6 +114,8 @@ class PostsController extends Controller
             $comment->user_id = $user->id;
         }
 
+        $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
+        $post->liked_users = $liked_users;
         $post->comments = $comments;
         $post->user_name = $user_name[0]->name;
         return view("layouts/view_post",
@@ -150,7 +155,7 @@ class PostsController extends Controller
             Storage::delete(str_replace('storage', 'public', $image_url));
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
-            $image_name = time().'.'.$extension;
+            $image_name = auth()->user()->id.'-'.time().'.'.$extension;
             $image->storeAs('public/post_images', $image_name);
             $image_url = "storage/post_images/".$image_name;
             Posts::where("id", $post_id)
@@ -182,7 +187,8 @@ class PostsController extends Controller
         Storage::delete(str_replace('storage', 'public', $image_url));
         Posts::where("id", $post_id)->delete();
         Comments::where("post_id", $post_id)->delete();
+        Likes::where('post_id', $post_id)->delete();
 
-        return redirect()->back();
+        return redirect('/home');
     }
 }

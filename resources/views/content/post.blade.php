@@ -69,14 +69,36 @@
             </audio>
         @else
             <a href="{{ $post['image_url'] }}" target="_blank">
-                <img src="../{{ $post['image_url'] }}" class="post-image">
+                <img src="../{{ $post['image_url'] }}" class="post-image" alt="{{ $post->user_name }}'s Post">
             </a>
         @endif
     @endif
 
-    <div class="add-comment-div container">
-        <button class="like-button btn btn-primary"> 👍 </button>
-        <button class="like-button btn btn-primary"> 🖕 </button>
+    <div class="container" style="display: inline-block">
+
+        <form action="{{ route('like') }}" style="display: inline-block" method="POST">
+            @csrf
+            <input type="hidden" name="postId" value="{{ $post->id }}">
+            <input type="hidden" name="is_like" value="1">
+            @if(!empty($post->liked_users) && $post->liked_users->is_like == 1)
+                <input type="submit" name="like_button" value=" 👍 " class="btn btn-warning">
+            @else
+                <input type="submit" name="like_button" value=" 👍 " class="btn btn-success">
+            @endif
+        </form>
+
+        <form action="{{ route('like') }}" style="display: inline-block" method="POST">
+            @csrf
+            <input type="hidden" name="postId" value="{{ $post->id }}">
+            <input type="hidden" name="is_like" value="0">
+            @if(!empty($post->liked_users) && $post->liked_users->is_like == 0)
+                <input type="submit" name="dislike_button" value=" 🖕 " class="btn btn-warning">
+            @else
+                <input type="submit" name="dislike_button" value=" 🖕 " class="btn btn-success">
+            @endif
+
+        </form>
+
         <p style="display: inline-block">Likes: {{ $post['likes'] }} </p>
         <p style="display: inline-block">Dislikes: {{ $post['dislikes'] }} </p>
 
@@ -84,6 +106,10 @@
             <button onclick="showComments{{ $post['id'] }}()" id="{{ "showCommentsButton".$post['id'] }}" class="btn btn-info">show comments</button>
             <p style="display: inline-block">Count: {{ count($post['comments']) }}</p>
         @endif
+
+    </div>
+
+    <div class="add-comment-div container">
 
         <div class="comment-form-box container">
             <form action="{{ route('storeComment') }}" method="POST">

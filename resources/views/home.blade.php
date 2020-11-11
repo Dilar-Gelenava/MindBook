@@ -14,6 +14,7 @@
             @foreach($posts as $post)
                 @include('content.post')
             @endforeach
+
         </div>
 
     </div>

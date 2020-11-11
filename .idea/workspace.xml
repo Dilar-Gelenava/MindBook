@@ -6,23 +6,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09b1cc36-ce14-49ca-a2e6-39d247dd537e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Middleware/CheckUser.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Likes.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_11_08_134536_create_likes_table.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/name(editproduct)" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/forms/edit_post.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/layouts/view_post.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Followers.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/FollowersController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/LikesController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2020_11_11_140726_create_followers_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CommentsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CommentsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Comments.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Comments.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProfileController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/UserData.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/UserData.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_04_151811_create_user_data_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_08_130252_create_user_data_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Likes.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Likes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Posts.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Posts.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_11_08_134536_create_likes_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_11_09_140006_create_likes_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/content/post.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/content/post.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/forms/add_post.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/forms/add_post.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/profile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/profile.blade.php" afterDir="false" />
@@ -180,7 +178,10 @@
       <workItem from="1604671101223" duration="5501000" />
       <workItem from="1604678086239" duration="113000" />
       <workItem from="1604678339001" duration="62651000" />
-      <workItem from="1604915237559" duration="3726000" />
+      <workItem from="1604915237559" duration="17452000" />
+      <workItem from="1604943303660" duration="5542000" />
+      <workItem from="1605094665280" duration="2665000" />
+      <workItem from="1605103207329" duration="24631000" />
     </task>
     <servers />
   </component>
@@ -208,10 +209,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="137" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1604494138885" />
-    <state x="413" y="119" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1604913355986">
+    <state x="413" y="119" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1605107380645">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="119" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1604913355986" />
+    <state x="413" y="119" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1605107380645" />
     <state width="1323" height="179" key="GridCell.Tab.0.bottom" timestamp="1604561545855">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -228,13 +229,13 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1323" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1604561545855" />
-    <state x="339" y="162" key="run.anything.popup" timestamp="1604860684342">
+    <state x="339" y="162" key="run.anything.popup" timestamp="1605107527788">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1604860684342" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1604823998816">
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1605107527788" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1605131288282">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1604823998816" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1605131288282" />
   </component>
 </project>

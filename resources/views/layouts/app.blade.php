@@ -85,6 +85,7 @@
                             </li>
                         @endif
                     @else
+                        <p style="margin-top: 10px; margin-right: 10px;">{{ Auth::user()->email }}</p>
                         <img style="height: 50px; width: 50px; border-radius: 50%; object-fit: cover;"
                              src="/storage/profile_pictures/{{ Auth::user()->id }}.jpg" onerror="this.onerror=null; this.src='../storage/profile_pictures/blank.png'">
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Followers;
+use App\Likes;
 use App\User;
 use App\UserData;
 use Illuminate\Http\Request;
@@ -21,6 +23,7 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+
     /**
      * Show the application dashboard.
      *
@@ -28,7 +31,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = Posts::all()->sortByDesc('id');
+
+//        $posts = DB::table('posts')
+//            ->join('followers', 'posts.user_id', '=', 'followers.follower_id')
+//            ->where('follower_id', auth()->id())->get();
+
+        $posts = Posts::all()->sortByDesc('id')->take(100);
+
+        $posts = collect($posts);
+
 
         foreach ($posts as $post) {
             $comments = collect(DB::table('comments')
@@ -44,12 +55,14 @@ class HomeController extends Controller
                 $comment->user_id = $user->id;
             }
 
+            $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
+            $post->liked_users = $liked_users;
             $post->comments = $comments;
             $post->user_name = $user_name[0]->name;
+
         }
 
         return view("home", [
-
             'posts' => $posts,
         ]);
 
