@@ -3,27 +3,27 @@
         <div class="container" style = "display: flex">
             <div class="user-link-box container">
 
-                <a href="{{ route('showProfile',['userId'=>$post->user_id, 'userName'=>$post->user_name]) }}">
+                <a href="/profile/{{ $post->user_id }}">
                     <img src="/storage/profile_pictures/{{ $post->user_id }}.jpg"
-                         onerror="this.onerror=null; this.src='../storage/profile_pictures/blank.png'"
+                         onerror="this.onerror=null; this.src='https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg'"
                          alt="{{ $post->user_name }}">
                 </a>
-                <a href="{{ route('showProfile',['userId'=>$post->user_id, 'userName'=>$post->user_name]) }}">
+                <a href="/profile/{{ $post->user_id }}">
                     {{ $post->user_name }}
                 </a>
             </div>
             <div>
                 <div class="edit-box container">
-                    @if($post['user_id'] == Auth::user()->id)
+                    @if($post->user_id == Auth::user()->id)
                         <a href="{{ route('showPost', ["postId"=>$post->id]) }}" class="btn btn-success">
                             View
                         </a>
-                        <button onclick="showPostOptions{{ $post['id'] }}()" class="btn btn-dark" id="{{ "showPostOptionsButton".$post['id'] }}">
+                        <button onclick="showPostOptions{{ $post->id }}()" class="btn btn-dark" id="{{ "showPostOptionsButton".$post->id }}">
                             Edit
                         </button>
-                        <div class="edit-options-box container" id="options{{ $post['id'] }}" style="display: none;">
+                        <div class="edit-options-box container" id="options{{ $post->id }}" style="display: none;">
                             @auth
-                                @if($post['user_id'] == Auth::user()->id)
+                                @if($post->user_id == Auth::user()->id)
                                     <form action="{{ route('editPost') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $post->id }}">
@@ -52,24 +52,24 @@
         </div>
     </div>
     <br>
-    <h3> {{ $post['title'] }}</h3>
+    <h3> {{ $post->title }}</h3>
     <div class="post-description-box">
-        <p>{{ $post['description'] }}</p>
+        <p>{{ $post->description }}</p>
     </div>
-    <p>{{ $post["created_at"]->diffForHumans() }}</p>
+    <p>{{ \Carbon\Carbon::parse($post->created_at)->diffForhumans() }}</p>
 
-    @if(!empty($post['image_url']))
-        @if(substr($post['image_url'], -3)=='mp4')
+    @if(!empty($post->image_url))
+        @if(substr($post->image_url, -3)=='mp4')
             <video width="100%" controls>
-                <source src="../{{ $post['image_url'] }}" type="video/mp4">
+                <source src="../{{ $post->image_url }}" type="video/mp4">
             </video>
-        @elseif(substr($post['image_url'], -3)=='mp3')
+        @elseif(substr($post->image_url, -3)=='mp3')
             <audio controls style="width: 530px">
-                <source src="../{{ $post['image_url'] }}" type="audio/ogg">
+                <source src="../{{ $post->image_url }}" type="audio/ogg">
             </audio>
         @else
-            <a href="{{ $post['image_url'] }}" target="_blank">
-                <img src="../{{ $post['image_url'] }}" class="post-image" alt="{{ $post->user_name }}'s Post">
+            <a href="/{{ $post->image_url }}">
+                <img src="../../{{ $post->image_url }}" class="post-image" alt="{{ $post->user_name }}'s Post">
             </a>
         @endif
     @endif
@@ -99,12 +99,12 @@
 
         </form>
 
-        <p style="display: inline-block">Likes: {{ $post['likes'] }} </p>
-        <p style="display: inline-block">Dislikes: {{ $post['dislikes'] }} </p>
+        <p style="display: inline-block">Likes: {{ $post->likes }} </p>
+        <p style="display: inline-block">Dislikes: {{ $post->dislikes }} </p>
 
-        @if (count($post['comments'])>0)
-            <button onclick="showComments{{ $post['id'] }}()" id="{{ "showCommentsButton".$post['id'] }}" class="btn btn-info">show comments</button>
-            <p style="display: inline-block">Count: {{ count($post['comments']) }}</p>
+        @if (count($post->comments)>0)
+            <button onclick="showComments{{ $post->id }}()" id="{{ "showCommentsButton".$post->id }}" class="btn btn-info">show comments</button>
+            <p style="display: inline-block">Count: {{ count($post->comments) }}</p>
         @endif
 
     </div>
@@ -114,14 +114,14 @@
         <div class="comment-form-box container">
             <form action="{{ route('storeComment') }}" method="POST">
                 @csrf
-                <input name="postId" type="hidden" value="{{ $post['id'] }}">
+                <input name="postId" type="hidden" value="{{ $post->id }}">
                 <textarea name="comment" id="commentInput" class="comment-textarea"></textarea>
                 <button class="submit add-comment-button btn btn-dark" > Add </button>
             </form>
         </div>
-        <div id="{{ $post['id'] }}" class="comments-box container">
+        <div id="{{ $post->id }}" class="comments-box container">
             <h4 style="color: purple"> comments: </h4>
-            @foreach ($post['comments'] as $comment)
+            @foreach ($post->comments as $comment)
                 <div class="comment-box container">
                     <div class="user-link-box">
                         <a href="/{{ $comment->user_id.'/'.$comment->user_name }}">
@@ -154,32 +154,32 @@
 
 <script>
 
-    @if (count($post['comments'])>0)
-        let commentsAreVisible{{ $post['id'] }} = false;
-        function showComments{{ $post['id'] }}() {
-            if (commentsAreVisible{{ $post['id'] }}) {
-                document.getElementById("{{ $post['id'] }}").style.display = "none";
-                document.getElementById("{{ "showCommentsButton".$post['id'] }}").innerHTML = "Show comments";
-                commentsAreVisible{{ $post['id'] }} = false;
+    @if (count($post->comments)>0)
+        let commentsAreVisible{{ $post->id }} = false;
+        function showComments{{ $post->id }}() {
+            if (commentsAreVisible{{ $post->id }}) {
+                document.getElementById("{{ $post->id }}").style.display = "none";
+                document.getElementById("{{ "showCommentsButton".$post->id }}").innerHTML = "Show comments";
+                commentsAreVisible{{ $post->id }} = false;
             } else {
-                document.getElementById("{{ $post['id'] }}").style.display = "block";
-                document.getElementById("{{ "showCommentsButton".$post['id'] }}").innerHTML = "Hide comments";
-                commentsAreVisible{{ $post['id'] }} = true;
+                document.getElementById("{{ $post->id }}").style.display = "block";
+                document.getElementById("{{ "showCommentsButton".$post->id }}").innerHTML = "Hide comments";
+                commentsAreVisible{{ $post->id }} = true;
             }
         }
     @endif
 
-    @if($post['user_id'] == Auth::user()->id)
-        let postOptionsAreVisible{{ $post['id'] }} = false;
-        function showPostOptions{{ $post['id'] }}() {
-            if (postOptionsAreVisible{{ $post['id'] }}) {
-                document.getElementById("options{{ $post['id'] }}").style.display = "none";
-                document.getElementById("{{ "showPostOptionsButton".$post['id'] }}").innerHTML = "Edit";
-                postOptionsAreVisible{{ $post['id'] }} = false;
+    @if($post->user_id == Auth::user()->id)
+        let postOptionsAreVisible{{ $post->id }} = false;
+        function showPostOptions{{ $post->id }}() {
+            if (postOptionsAreVisible{{ $post->id }}) {
+                document.getElementById("options{{ $post->id }}").style.display = "none";
+                document.getElementById("{{ "showPostOptionsButton".$post->id }}").innerHTML = "Edit";
+                postOptionsAreVisible{{ $post->id }} = false;
             } else {
-                document.getElementById("options{{ $post['id'] }}").style.display = "block";
-                document.getElementById("{{ "showPostOptionsButton".$post['id'] }}").innerHTML = "Hide Edit";
-                postOptionsAreVisible{{ $post['id'] }} = true;
+                document.getElementById("options{{ $post->id }}").style.display = "block";
+                document.getElementById("{{ "showPostOptionsButton".$post->id }}").innerHTML = "Hide Edit";
+                postOptionsAreVisible{{ $post->id }} = true;
             }
         }
     @endif

@@ -1,15 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <link rel="stylesheet" type="text/css" href="../../css/main.css">
-
 
         <div class="container" style="text-align: center; width: 450px; background-color: #646464; border-radius: 15px;">
 
             <h1>{{ $user_name }}</h1>
             <a href="../{{ $profile_picture_url }}">
                 <img style="border-radius: 15px; margin-top: 5px;"
-                     src="../{{ $profile_picture_url }}"
+                     src="../{{ $profile_picture_url }}" onerror="this.onerror=null; this.src='https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg'"
                      width="400px" alt="{{ $user_data->first_name }}">
             </a>
 
@@ -42,7 +40,7 @@
                     @foreach($user_followers as $f)
                         <div style="background-color: #141414; padding: 5px; border-radius: 10px; text-align: center; margin: 5px;">
                             <span>{{ $loop->index + 1 }}</span>
-                            <a href="/{{ $f->follower_id }}/{{ $f->name }}" target="_blank">
+                            <a href="/profile/{{ $f->follower_id }}" target="_blank">
                                 {{ $f->name }}
                             </a>
                         </div>
@@ -53,7 +51,7 @@
                     @foreach($user_follows as $f)
                         <div style="background-color: #141414; padding: 5px; border-radius: 10px; text-align: center; margin: 5px;">
                             <span>{{ $loop->index + 1 }}</span>
-                            <a href="/{{ $f->following_id }}/{{ $f->name }}" target="_blank">
+                            <a href="/profile/{{ $f->following_id }}" target="_blank">
                                 {{ $f->name }}
                             </a>
                         </div>
@@ -62,12 +60,12 @@
             </div>
         </div>
 
-
     <div class="container" style="background-color: #282828; border-radius: 15px; margin-top: 15px;">
         <table class="table">
             <tr>
-                <th> <p>First Name</p> </th>
+                <th> <p>First Name </p> </th>
                 <th> <p>Last Name</p> </th>
+                <th> <p>Sex</p> </th>
                 <th> <p>Birthday</p> </th>
                 <th> <p>Address</p> </th>
                 <th> <p>Followers</p> </th>
@@ -76,7 +74,8 @@
             <tr>
                 <td> <p>{{ $user_data->first_name }}</p> </td>
                 <td> <p>{{ $user_data->last_name }}</p> </td>
-                <td> <p>{{ $user_data->birthday }}</p> </td>
+                <td> <p>{{ $user_data->sex }}</p> </td>
+                <td> <p>{{ $user_data->birthday }} <br> ({{ Carbon\Carbon::parse($user_data->birthday)->age }} years old)</p> </td>
                 <td> <p>{{ $user_data->address }}</p> </td>
                 <td> <p>{{ $user_data->followers }}</p> </td>
                 <td> <p>{{ $user_data->following }}</p> </td>
@@ -84,7 +83,7 @@
         </table>
     </div>
     @if ($user_id == auth()->id())
-        <div class="container" style="width: 300px; background-color: #646464; border-radius: 15px; padding: 10px;">
+        <div class="container" style="width: 300px; background-color: #1e1e1e; border-radius: 15px; padding: 10px;">
             <form action="{{ route("storeUserData") }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="userId" value="{{ $user_id }}">
@@ -99,6 +98,14 @@
                     <br>
                     <input type="text" class="form-control" placeholder="Address" name="address" value="{{ $user_data->address }}">
                     <br>
+
+                    <p>Please select your gender:</p>
+                    <input type="radio" id="male" name="gender" value="1" {{ $male }}>
+                    <label for="male">Male</label><br>
+                    <input type="radio" id="female" name="gender" value="0" {{ $female }}>
+                    <label for="female">Female</label><br>
+
+                    <br>
                     <input type="file" name="image" style="width: auto;">
                 @else
                     <input type="text" class="form-control" placeholder="First Name" name="firstName">
@@ -110,6 +117,15 @@
                     <input type="date" class="form-control" placeholder="Birthday" name="birthday">
                     <br>
                     <input type="text" class="form-control" placeholder="Address" name="address">
+                    <br>
+
+                    <p>Please select your gender:</p>
+                    <input type="radio" id="male" name="gender" value="1" {{ $male }}>
+                    <label for="male">Male</label><br>
+                    <input type="radio" id="female" name="gender" value="0" {{ $female }}>
+                    <label for="female">Female</label><br>
+
+
                     <br>
                     <input type="file" name="image" style="width: auto;">
                 @endisset
@@ -129,11 +145,11 @@
     function showFollowers() {
         if (followersAreVisible) {
             document.getElementById('followersList').style.display = 'none';
-            document.getElementById('showFollowersButton').innerHTML = 'Hide Followers';
+            document.getElementById('showFollowersButton').innerHTML = 'Show Followers';
             followersAreVisible = false;
         } else {
             document.getElementById('followersList').style.display = 'inline-block';
-            document.getElementById('showFollowersButton').innerHTML = 'Show Followers';
+            document.getElementById('showFollowersButton').innerHTML = 'Hide Followers';
             followersAreVisible = true;
         }
 

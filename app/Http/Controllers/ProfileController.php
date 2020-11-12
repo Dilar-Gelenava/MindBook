@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Followers;
 use App\Likes;
 use App\Posts;
+use App\User;
 use App\UserData;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -24,75 +25,87 @@ class ProfileController extends Controller
      * @param $userId
      * @return Application|Factory|View|void
      */
-    public function index($userId, $userName)
+    public function index($userId)
     {
 
-        $user = DB::table('users')->where('id', $userId)->where('name', $userName)->first();
-        if (!empty($user)){
-            $user_data = UserData::where('user_id', $userId)->first();
-            $posts = Posts::all()->where('user_id', $userId)->sortByDesc('id');
-            foreach ($posts as $post) {
-                $comments = collect(DB::table('comments')
-                    ->where('post_id', '=', $post->id)->get())->sortByDesc('id');
-                $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
-                $post->liked_users = $liked_users;
-                $post->comments = $comments;
-                $post->user_name = $userName;
-            }
-
-            $following = !empty(Followers::all()
-                ->where('follower_id', auth()->user()->id)
-                ->where('following_id', $userId)->first());
+        $user_name = User::where('id', $userId)->firstOrFail()->name;
 
 
-            if (empty($user_data)) {
-                UserData::create([
-                    "user_id" => $userId,
-                ]);
-                $user_data = UserData::where('user_id', $userId)->first();
-                $profile_picture_url = '../storage/profile_pictures/blank.png';
-            } else {
-                $profile_picture_url = $user_data->profile_picture_url;
-            }
+        $user = DB::table('users')->where('id', $userId)->where('name', $user_name)->first();
 
-            $user_followers = DB::table('followers')
-                ->join('users', 'users.id', '=', 'followers.following_id')
-                ->where('followers.following_id', $userId)
-                ->get();
-            foreach ($user_followers as $user_follower) {
-                $follower_name = DB::table('users')
-                    ->where('id', $user_follower->follower_id)
-                    ->first()->name;
-                $user_follower->name = $follower_name;
-            }
-
-            $user_follows = DB::table('followers')
-                ->join('users', 'users.id', '=', 'followers.follower_id')
-                ->where('followers.follower_id', $userId)
-                ->get();
-            foreach ($user_follows as $user_follow) {
-                $follow_name = DB::table('users')
-                    ->where('id', $user_follow->following_id)
-                    ->first()->name;
-                $user_follow->name = $follow_name;
-            }
-
-
-            return view("profile", [
-                'user_followers' => $user_followers,
-                'user_follows' => $user_follows,
-                'following' => $following,
-                'user_id' => $userId,
-                'posts' => $posts,
-                'user_data' => $user_data,
-                'user_image' => 1,
-                'user_name' => $user->name,
-                'profile_picture_url' => $profile_picture_url,
-            ]);
-
-        } else {
-            return abort(404);
+        $user_data = UserData::where('user_id', $userId)->first();
+        $posts = Posts::all()->where('user_id', $userId)->sortByDesc('id');
+        foreach ($posts as $post) {
+            $comments = collect(DB::table('comments')
+                ->where('post_id', '=', $post->id)->get())->sortByDesc('id');
+            $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
+            $post->liked_users = $liked_users;
+            $post->comments = $comments;
+            $post->user_name = $user_name;
         }
+
+        $following = !empty(Followers::all()
+            ->where('follower_id', auth()->user()->id)
+            ->where('following_id', $userId)->first());
+
+
+        if (empty($user_data)) {
+            UserData::create([
+                "user_id" => $userId,
+            ]);
+            $user_data = UserData::where('user_id', $userId)->first();
+            $profile_picture_url = 'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg';
+        } else {
+            $profile_picture_url = $user_data->profile_picture_url;
+        }
+
+        $user_followers = DB::table('followers')
+            ->join('users', 'users.id', '=', 'followers.following_id')
+            ->where('followers.following_id', $userId)
+            ->get();
+        foreach ($user_followers as $user_follower) {
+            $follower_name = DB::table('users')
+                ->where('id', $user_follower->follower_id)
+                ->first()->name;
+            $user_follower->name = $follower_name;
+        }
+
+        $user_follows = DB::table('followers')
+            ->join('users', 'users.id', '=', 'followers.follower_id')
+            ->where('followers.follower_id', $userId)
+            ->get();
+        foreach ($user_follows as $user_follow) {
+            $follow_name = DB::table('users')
+                ->where('id', $user_follow->following_id)
+                ->first()->name;
+            $user_follow->name = $follow_name;
+        }
+
+        $male = '';
+        $female = '';
+        if ($user_data->sex == 1) {
+            $user_data->sex = 'male';
+            $male = 'checked';
+        } elseif ($user_data->sex == 0) {
+            $user_data->sex = 'female';
+            $female = 'checked';
+        } else {
+            $user_data->sex = '';
+        }
+
+
+        return view("profile", [
+            'user_followers' => $user_followers,
+            'user_follows' => $user_follows,
+            'following' => $following,
+            'user_id' => $userId,
+            'posts' => $posts,
+            'user_data' => $user_data,
+            'user_name' => $user->name,
+            'profile_picture_url' => $profile_picture_url,
+            'male' => $male,
+            'female' => $female,
+        ]);
 
     }
 
@@ -110,7 +123,7 @@ class ProfileController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Application|ResponseFactory|RedirectResponse|Response
+     * @return array|Application|ResponseFactory|RedirectResponse|Response|string
      */
     public function store_user_data(Request $request)
     {
@@ -123,7 +136,7 @@ class ProfileController extends Controller
             $image->storeAs('public/profile_pictures', $image_name);
             $image_url = "storage/profile_pictures/".$image_name;
         } else {
-            $image_url = 'storage/profile_pictures/blank.png';
+            $image_url = 'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg';
         }
 
         $user_data = UserData::where('user_id', $request->input('userId'))->get();
@@ -142,6 +155,7 @@ class ProfileController extends Controller
                 ->update([
                     'first_name'=>$request->input('firstName'),
                     'last_name'=>$request->input('lastName'),
+                    'sex'=>$request->input('gender'),
                     'bio'=>$request->input('bio'),
                     'birthday'=>$request->input('birthday'),
                     'address'=>$request->input('address'),
@@ -155,6 +169,7 @@ class ProfileController extends Controller
         }
 
         return redirect()->back();
+
 
     }
 

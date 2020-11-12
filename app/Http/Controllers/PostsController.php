@@ -28,7 +28,7 @@ class PostsController extends Controller
      */
     public function index($userId)
     {
-        $user_name = User::where('id', $userId)->firstOrFail();
+        $name = User::where('id', $userId)->firstOrFail()->name;
         $posts = collect(Posts::where('user_id', $userId)->get())->sortByDesc('id');
 
         foreach ($posts as $post) {
@@ -52,7 +52,7 @@ class PostsController extends Controller
 
         return view("home", [
             'posts' => $posts,
-            'user_name' => $user_name[0]->name,
+            'user_name' => $name,
         ]);
 
     }

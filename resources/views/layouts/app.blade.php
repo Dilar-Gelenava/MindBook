@@ -57,7 +57,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div style="border-radius: 15px; background-color: purple; margin-right: 20px;">
-                <a style="transform: translate(8px)" class="navbar-brand" href="{{ url('/') }}"> MindBook </a>
+                <a style="transform: translate(8px)" class="navbar-brand" href="{{ url('/home') }}"> MindBook </a>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -66,10 +66,19 @@
                 @auth
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="navbar-brand" href="{{ url('/home') }}"> Home </a>
+                        <a class="navbar-brand" href="/profile/{{ Auth::user()->id }}"> My Profile </a>
                     </li>
                     <li class="nav-item">
-                        <a class="navbar-brand" href="/{{ Auth::user()->id.'/'.Auth::user()->name }}"> My Profile </a>
+                        <a class="navbar-brand" href="/{{ 'posts/'.Auth::user()->id }}"> My Posts </a>
+                    </li>
+                    <li>
+                        <form action="{{ route('search') }}" method="POST">
+                            @csrf
+                            <label>
+                                <input type="text" name="userName" placeholder="Type username here...">
+                            </label>
+                            <button class="btn btn-success"> search </button>
+                        </form>
                     </li>
                 </ul>
                 @endauth
@@ -86,8 +95,10 @@
                         @endif
                     @else
                         <p style="margin-top: 10px; margin-right: 10px;">{{ Auth::user()->email }}</p>
-                        <img style="height: 50px; width: 50px; border-radius: 50%; object-fit: cover;"
-                             src="/storage/profile_pictures/{{ Auth::user()->id }}.jpg" onerror="this.onerror=null; this.src='../storage/profile_pictures/blank.png'">
+                        <a href="/profile/{{ Auth::user()->id }}">
+                            <img style="height: 50px; width: 50px; border-radius: 50%; border: 2px solid white; object-fit: cover;"
+                                 src="/storage/profile_pictures/{{ Auth::user()->id }}.jpg" onerror="this.onerror=null; this.src='https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg'">
+                        </a>
 
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

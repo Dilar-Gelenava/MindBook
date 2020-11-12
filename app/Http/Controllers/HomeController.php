@@ -6,6 +6,7 @@ use App\Followers;
 use App\Likes;
 use App\User;
 use App\UserData;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use App\Posts;
 use App\Comments;
@@ -23,25 +24,23 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-
     /**
      * Show the application dashboard.
      *
-//     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Renderable
      */
     public function index()
     {
 
-//        $posts = DB::table('posts')
-//            ->join('followers', 'posts.user_id', '=', 'followers.follower_id')
-//            ->where('follower_id', auth()->id())->get();
+        $posts = DB::table('posts')
+            ->orderBy('id', 'DESC')
+            ->join('followers', 'posts.user_id', '=', 'followers.following_id')
+            ->select('posts.*', 'follower_id')
+            ->where('follower_id', auth()->id())
+            ->take(10)
+            ->get();
 
-        $posts = Posts::all()->sortByDesc('id')->take(100);
-
-        $posts = collect($posts);
-
-
-        foreach ($posts as $post) {
+        foreach (collect($posts) as $post) {
             $comments = collect(DB::table('comments')
                 ->where('post_id', '=', $post->id)->get())->sortByDesc('id');
             $user_name = DB::table('users')
@@ -67,4 +66,38 @@ class HomeController extends Controller
         ]);
 
     }
+
+    public function search(Request $request) {
+    return redirect('search/'.$request->input('userName'));
+}
+
+    public function show_results($userName) {
+
+        $users = DB::table('users')
+            ->orderBy('id', 'DESC')
+            ->select('id', 'users.name')
+            ->where('users.name','like','%'.$userName.'%')
+            ->take(10)
+            ->get();
+
+
+        foreach ($users as $user) {
+            $user_avatar = DB::table('user_data')
+                ->orderBy('id', 'DESC')
+                ->select('profile_picture_url')
+                ->where('user_id', $user->id)
+                ->first();
+            if (!empty($user_avatar)) {
+                $user->avatar = '/'.$user_avatar->profile_picture_url;
+            } else {
+                $user->avatar = 'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg';
+            }
+        }
+
+        return view('search_results', [
+            'users' => $users,
+        ]);
+
+    }
+
 }
