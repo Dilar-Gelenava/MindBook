@@ -39,8 +39,8 @@
     vertical-align:middle;
     background-color: #646464;
     border-radius: 15px;
-    width: 300px;
     margin-top: 10px;
+    width: 230px;
 }
 .comment-box {
     align-items: center;
@@ -79,10 +79,13 @@
     margin-top: 30px;
 }
 .edit-box button, a {
-    width: 80px;
+    width: 140px;
     margin: 3px;
 }
 .edit-options-box {
     background: #141414;
     border-radius: 5px;
+}
+.contact-box:hover {
+    background-color: #ffffff;
 }

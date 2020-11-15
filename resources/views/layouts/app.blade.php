@@ -57,7 +57,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div style="border-radius: 15px; background-color: purple; margin-right: 20px;">
-                <a style="transform: translate(8px)" class="navbar-brand" href="{{ url('/home') }}"> MindBook </a>
+                <a style="width: 70px;" class="navbar-brand" href="{{ url('/home') }}"> MindBook </a>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -66,18 +66,21 @@
                 @auth
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="navbar-brand" href="/profile/{{ Auth::user()->id }}"> My Profile </a>
+                        <a class="navbar-brand" href="/profile/{{ Auth::user()->id }}"> ჩემი პროფილი </a>
                     </li>
                     <li class="nav-item">
-                        <a class="navbar-brand" href="/{{ 'posts/'.Auth::user()->id }}"> My Posts </a>
+                        <a class="navbar-brand" href="/{{ 'posts/'.Auth::user()->id }}"> ჩემი პოსტები </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navbar-brand" href="{{ route('messages') }}"> წერილები </a>
                     </li>
                     <li>
                         <form action="{{ route('search') }}" method="POST">
                             @csrf
                             <label>
-                                <input type="text" name="userName" placeholder="Type username here...">
+                                <input type="text" name="userName" placeholder="ძებნა Mindbook-ზე...">
                             </label>
-                            <button class="btn btn-success"> search </button>
+                            <button class="btn btn-success"> ძიება </button>
                         </form>
                     </li>
                 </ul>
@@ -97,7 +100,7 @@
                         <p style="margin-top: 10px; margin-right: 10px;">{{ Auth::user()->email }}</p>
                         <a href="/profile/{{ Auth::user()->id }}">
                             <img style="height: 50px; width: 50px; border-radius: 50%; border: 2px solid white; object-fit: cover;"
-                                 src="/storage/profile_pictures/{{ Auth::user()->id }}.jpg" onerror="this.onerror=null; this.src='https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg'">
+                                 src="/storage/profile_pictures/{{ Auth::user()->id }}.jpg" onerror="this.onerror=null; this.src='/default-avatar.jpg'">
                         </a>
 
                         <li class="nav-item dropdown">

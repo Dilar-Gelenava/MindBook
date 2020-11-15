@@ -5,7 +5,7 @@
 
                 <a href="/profile/{{ $post->user_id }}">
                     <img src="/storage/profile_pictures/{{ $post->user_id }}.jpg"
-                         onerror="this.onerror=null; this.src='https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg'"
+                         onerror="this.onerror=null; this.src='/default-avatar.jpg'"
                          alt="{{ $post->user_name }}">
                 </a>
                 <a href="/profile/{{ $post->user_id }}">
@@ -16,10 +16,10 @@
                 <div class="edit-box container">
                     @if($post->user_id == Auth::user()->id)
                         <a href="{{ route('showPost', ["postId"=>$post->id]) }}" class="btn btn-success">
-                            View
+                            დათვალიერება
                         </a>
                         <button onclick="showPostOptions{{ $post->id }}()" class="btn btn-dark" id="{{ "showPostOptionsButton".$post->id }}">
-                            Edit
+                            რედაქტირება
                         </button>
                         <div class="edit-options-box container" id="options{{ $post->id }}" style="display: none;">
                             @auth
@@ -28,14 +28,14 @@
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $post->id }}">
                                         <button class="btn btn-warning">
-                                            Update
+                                            განახლება
                                         </button>
                                     </form>
                                     <form action="{{ route('destroyPost') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="postId" value="{{ $post->id }}">
                                         <button class="btn btn-danger">
-                                            Delete
+                                            წაშლა
                                         </button>
                                     </form>
                                 @endif
@@ -43,7 +43,7 @@
                         </div>
                     @else
                         <a href="{{ route('showPost', ["postId"=>$post->id]) }}" class="btn btn-success">
-                            View
+                            დათვალიერება
                         </a>
                     @endif
 
@@ -52,7 +52,6 @@
         </div>
     </div>
     <br>
-    <h3> {{ $post->title }}</h3>
     <div class="post-description-box">
         <p>{{ $post->description }}</p>
     </div>
@@ -64,9 +63,11 @@
                 <source src="../{{ $post->image_url }}" type="video/mp4">
             </video>
         @elseif(substr($post->image_url, -3)=='mp3')
-            <audio controls style="width: 530px">
-                <source src="../{{ $post->image_url }}" type="audio/ogg">
-            </audio>
+            <div style="text-align: center;">
+                <audio controls width="100%">
+                    <source src="../{{ $post->image_url }}" type="audio/ogg">
+                </audio>
+            </div>
         @else
             <a href="/{{ $post->image_url }}">
                 <img src="../../{{ $post->image_url }}" class="post-image" alt="{{ $post->user_name }}'s Post">
@@ -74,13 +75,13 @@
         @endif
     @endif
 
-    <div class="container" style="display: inline-block">
 
+    <div class="container" style="display: inline-block">
         <form action="{{ route('like') }}" style="display: inline-block" method="POST">
             @csrf
             <input type="hidden" name="postId" value="{{ $post->id }}">
             <input type="hidden" name="is_like" value="1">
-            @if(!empty($post->liked_users) && $post->liked_users->is_like == 1)
+            @if(!empty($post->user_like) && $post->user_like->is_like == 1)
                 <input type="submit" name="like_button" value=" 👍 " class="btn btn-warning">
             @else
                 <input type="submit" name="like_button" value=" 👍 " class="btn btn-success">
@@ -91,7 +92,7 @@
             @csrf
             <input type="hidden" name="postId" value="{{ $post->id }}">
             <input type="hidden" name="is_like" value="0">
-            @if(!empty($post->liked_users) && $post->liked_users->is_like == 0)
+            @if(!empty($post->user_like) && $post->user_like->is_like == 0)
                 <input type="submit" name="dislike_button" value=" 🖕 " class="btn btn-warning">
             @else
                 <input type="submit" name="dislike_button" value=" 🖕 " class="btn btn-success">
@@ -99,14 +100,30 @@
 
         </form>
 
-        <p style="display: inline-block">Likes: {{ $post->likes }} </p>
-        <p style="display: inline-block">Dislikes: {{ $post->dislikes }} </p>
+        <p style="display: inline-block">მოწონს: {{ $post->likes }} </p>
+        <p style="display: inline-block">არ მოწონს: {{ $post->dislikes }} </p>
 
         @if (count($post->comments)>0)
-            <button onclick="showComments{{ $post->id }}()" id="{{ "showCommentsButton".$post->id }}" class="btn btn-info">show comments</button>
+            <button onclick="showComments{{ $post->id }}()" id="{{ "showCommentsButton".$post->id }}" class="btn btn-info">მაჩვენე კომენტარები</button>
             <p style="display: inline-block">Count: {{ count($post->comments) }}</p>
         @endif
+    </div>
 
+    <div style="display: inline-block;">
+        <div style="display: inline-block; background-color: #1e1e1e; vertical-align: top; border-radius: 15px; padding: 10px;">
+            <h5>მოწონს</h5>
+            @foreach($post->liked_users as $liked_user)
+                <a href="profile/{{ $liked_user->id }}">{{ $liked_user->name }}</a>
+                <br>
+            @endforeach
+        </div>
+        <div style="display: inline-block; background-color: #1e1e1e; vertical-align: top; border-radius: 15px; padding: 10px;">
+            <h5>არ მოწონს</h5>
+            @foreach($post->disliked_users as $disliked_user)
+                <a href="profile/{{ $disliked_user->id }}">{{ $disliked_user->name }}</a>
+                <br>
+            @endforeach
+        </div>
     </div>
 
     <div class="add-comment-div container">
@@ -116,19 +133,19 @@
                 @csrf
                 <input name="postId" type="hidden" value="{{ $post->id }}">
                 <textarea name="comment" id="commentInput" class="comment-textarea"></textarea>
-                <button class="submit add-comment-button btn btn-dark" > Add </button>
+                <button class="submit add-comment-button btn btn-dark" > დამატება </button>
             </form>
         </div>
         <div id="{{ $post->id }}" class="comments-box container">
-            <h4 style="color: purple"> comments: </h4>
+            <h4 style="color: purple"> კომენტარები: </h4>
             @foreach ($post->comments as $comment)
                 <div class="comment-box container">
                     <div class="user-link-box">
-                        <a href="/{{ $comment->user_id.'/'.$comment->user_name }}">
-                            <img src="/storage/profile_pictures/{{ $comment->user_id }}.jpg" onerror="this.onerror=null; this.src='../storage/profile_pictures/blank.png'"
+                        <a href="/profile/{{ $comment->user_id }}">
+                            <img src="/storage/profile_pictures/{{ $comment->user_id }}.jpg" onerror="this.onerror=null; this.src='/default-avatar.jpg'"
                                  alt="{{ $comment->user_name }}" class="small-avatar">
                         </a>
-                        <a href="/{{ $comment->user_id.'/'.$comment->user_name }}" class="user-link"> {{ $comment->user_name }} </a>
+                        <a href="/profile/{{ $comment->user_id }}" class="user-link"> {{ $comment->user_name }} </a>
                     </div>
 
                     <div class="container comment-text-box">
@@ -141,7 +158,7 @@
                             <form action="{{ route('destroyComment') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="commentId" value="{{ $comment->id }}">
-                                <button class="btn btn-danger"> Delete Comment </button>
+                                <button class="btn btn-danger"> კომენტარის წაშლა </button>
                             </form>
                         @endif
                     </div>
@@ -159,11 +176,11 @@
         function showComments{{ $post->id }}() {
             if (commentsAreVisible{{ $post->id }}) {
                 document.getElementById("{{ $post->id }}").style.display = "none";
-                document.getElementById("{{ "showCommentsButton".$post->id }}").innerHTML = "Show comments";
+                document.getElementById("{{ "showCommentsButton".$post->id }}").innerHTML = "მაჩვენე კომენტარები";
                 commentsAreVisible{{ $post->id }} = false;
             } else {
                 document.getElementById("{{ $post->id }}").style.display = "block";
-                document.getElementById("{{ "showCommentsButton".$post->id }}").innerHTML = "Hide comments";
+                document.getElementById("{{ "showCommentsButton".$post->id }}").innerHTML = "დამალე კომენტარები";
                 commentsAreVisible{{ $post->id }} = true;
             }
         }
@@ -174,11 +191,11 @@
         function showPostOptions{{ $post->id }}() {
             if (postOptionsAreVisible{{ $post->id }}) {
                 document.getElementById("options{{ $post->id }}").style.display = "none";
-                document.getElementById("{{ "showPostOptionsButton".$post->id }}").innerHTML = "Edit";
+                document.getElementById("{{ "showPostOptionsButton".$post->id }}").innerHTML = "რედაქტირება";
                 postOptionsAreVisible{{ $post->id }} = false;
             } else {
                 document.getElementById("options{{ $post->id }}").style.display = "block";
-                document.getElementById("{{ "showPostOptionsButton".$post->id }}").innerHTML = "Hide Edit";
+                document.getElementById("{{ "showPostOptionsButton".$post->id }}").innerHTML = "დამალვა";
                 postOptionsAreVisible{{ $post->id }} = true;
             }
         }

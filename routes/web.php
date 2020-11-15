@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Carbon\Carbon;
+
+
+App::make('files')->link(storage_path('app/public'), public_path('storage'));
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +22,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/messages', 'MessagesController@index')->middleware('auth')->name('messages');
+
+Route::post('/add/contact', 'MessagesController@add_contact')->middleware('auth')->name('addContact');
 
 Route::post('/store/post', 'PostsController@store_post')->name('storePost');
 
@@ -45,4 +53,9 @@ Route::post('/follow', 'FollowersController@follow')->name('follow');
 
 Route::post('/search', 'HomeController@search')->name('search');
 
-Route::get('/search/{userName}', 'HomeController@show_results')->name('showResults');
+Route::get('/search/{userName}', 'HomeController@show_results')->middleware('auth')->name('showResults');
+
+Route::get('/messages/chat', 'MessagesController@chat')->middleware('auth')->name('chat');
+
+Route::post('/messages/send', 'MessagesController@send')->middleware('auth')->name('send');
+

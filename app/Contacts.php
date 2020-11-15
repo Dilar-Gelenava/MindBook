@@ -4,9 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Posts extends Model
+class Contacts extends Model
 {
     protected $fillable=[
-        "user_id", "description", "image_url",
+        "user_id",
+        "contact_id",
+        "last_message_id",
     ];
 }

@@ -9,13 +9,13 @@ use App\User;
 use App\UserData;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class PostsController extends Controller
@@ -33,7 +33,8 @@ class PostsController extends Controller
 
         foreach ($posts as $post) {
             $comments = collect(DB::table('comments')
-                ->where('post_id', '=', $post->id)->get())->sortByDesc('id');
+                ->where('post_id', '=', $post->id)->get())
+                ->sortByDesc('id');
             $user_name = DB::table('users')
                 ->where('id', '=', $post->user_id)
                 ->select('name')
@@ -44,10 +45,31 @@ class PostsController extends Controller
                 $comment->user_name = $user->name;
                 $comment->user_id = $user->id;
             }
-            $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
-            $post->liked_users = $liked_users;
+            $user_like = Likes::all()
+                ->where('post_id', $post->id)
+                ->where('user_id', auth()->user()->id)
+                ->first();
+
+            $liked_users = DB::table('likes')
+                ->where('post_id', $post->id)
+                ->where('is_like', '=', 1)
+                ->join('users', 'users.id', 'likes.user_id')
+                ->select('users.id', 'users.name')
+                ->get();
+
+            $disliked_users = DB::table('likes')
+                ->where('post_id', $post->id)
+                ->where('is_like', '=', 0)
+                ->join('users', 'users.id', 'likes.user_id')
+                ->select('users.id', 'users.name')
+                ->get();
+
+
+            $post->user_like = $user_like;
             $post->comments = $comments;
             $post->user_name = $user_name[0]->name;
+            $post->liked_users = $liked_users;
+            $post->disliked_users = $disliked_users;
         }
 
         return view("home", [
@@ -74,6 +96,21 @@ class PostsController extends Controller
      */
     public function store_post(Request $request)
     {
+
+
+        $validator = Validator::make(
+            [
+                'description' => 'required',
+                
+            ],
+            [
+                'name' => 'required',
+                'password' => 'required|min:8',
+                'email' => 'required|email|unique:users'
+            ]
+        );
+
+
         if($request->hasFile('image'))
         {
             $image = $request->file('image');
@@ -84,8 +121,8 @@ class PostsController extends Controller
         } else {
             $image_url = Null;
         }
+
         Posts::create([
-            "title"=>$request->input("title"),
             "description"=>$request->input("description"),
             "user_id"=>auth()->user()->id,
             "image_url"=>$image_url
@@ -114,10 +151,31 @@ class PostsController extends Controller
             $comment->user_id = $user->id;
         }
 
-        $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
-        $post->liked_users = $liked_users;
+        $user_like = Likes::all()
+            ->where('post_id', $post->id)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
+        $liked_users = DB::table('likes')
+            ->where('post_id', $post->id)
+            ->where('is_like', '=', 1)
+            ->join('users', 'users.id', 'likes.user_id')
+            ->select('users.id', 'users.name')
+            ->get();
+
+        $disliked_users = DB::table('likes')
+            ->where('post_id', $post->id)
+            ->where('is_like', '=', 0)
+            ->join('users', 'users.id', 'likes.user_id')
+            ->select('users.id', 'users.name')
+            ->get();
+
+        $post->user_like = $user_like;
         $post->comments = $comments;
         $post->user_name = $user_name[0]->name;
+        $post->liked_users = $liked_users;
+        $post->disliked_users = $disliked_users;
+
         return view("layouts/view_post",
             ['post' => $post]
         );
@@ -165,7 +223,6 @@ class PostsController extends Controller
         }
         Posts::where("id", $post_id)
             ->update([
-            "title"=>$request->input("title"),
             "description"=>$request->input("description"),
         ]);
         return redirect('home');

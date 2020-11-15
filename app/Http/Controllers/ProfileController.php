@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contacts;
 use App\Followers;
 use App\Likes;
 use App\Posts;
@@ -54,7 +55,7 @@ class ProfileController extends Controller
                 "user_id" => $userId,
             ]);
             $user_data = UserData::where('user_id', $userId)->first();
-            $profile_picture_url = 'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg';
+            $profile_picture_url = 'default-avatar.jpg';
         } else {
             $profile_picture_url = $user_data->profile_picture_url;
         }
@@ -93,6 +94,10 @@ class ProfileController extends Controller
             $user_data->sex = '';
         }
 
+        $in_contacts = !empty(Contacts::all()
+            ->where('user_id', auth()->id())
+            ->where('contact_id', $userId)
+            ->first());
 
         return view("profile", [
             'user_followers' => $user_followers,
@@ -105,6 +110,7 @@ class ProfileController extends Controller
             'profile_picture_url' => $profile_picture_url,
             'male' => $male,
             'female' => $female,
+            'in_contacts' => $in_contacts,
         ]);
 
     }
@@ -136,7 +142,7 @@ class ProfileController extends Controller
             $image->storeAs('public/profile_pictures', $image_name);
             $image_url = "storage/profile_pictures/".$image_name;
         } else {
-            $image_url = 'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg';
+            $image_url = '/default-avatar.jpg';
         }
 
         $user_data = UserData::where('user_id', $request->input('userId'))->get();
@@ -167,6 +173,9 @@ class ProfileController extends Controller
                     ]);
             }
         }
+        DB::table('users')
+            ->where('id', $request->input('userId'))
+            ->update(['name' => $request->input('userName')]);
 
         return redirect()->back();
 

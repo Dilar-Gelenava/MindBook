@@ -54,10 +54,30 @@ class HomeController extends Controller
                 $comment->user_id = $user->id;
             }
 
-            $liked_users = Likes::all()->where('post_id', $post->id)->where('user_id', auth()->user()->id)->first();
-            $post->liked_users = $liked_users;
+            $user_like = Likes::all()
+                ->where('post_id', $post->id)
+                ->where('user_id', auth()->user()->id)
+                ->first();
+
+            $liked_users = DB::table('likes')
+                ->where('post_id', $post->id)
+                ->where('is_like', '=', 1)
+                ->join('users', 'users.id', 'likes.user_id')
+                ->select('users.id', 'users.name')
+                ->get();
+
+            $disliked_users = DB::table('likes')
+                ->where('post_id', $post->id)
+                ->where('is_like', '=', 0)
+                ->join('users', 'users.id', 'likes.user_id')
+                ->select('users.id', 'users.name')
+                ->get();
+
+            $post->user_like = $user_like;
             $post->comments = $comments;
             $post->user_name = $user_name[0]->name;
+            $post->liked_users = $liked_users;
+            $post->disliked_users = $disliked_users;
 
         }
 
@@ -68,7 +88,7 @@ class HomeController extends Controller
     }
 
     public function search(Request $request) {
-    return redirect('search/'.$request->input('userName'));
+        return redirect('search/'.$request->input('userName'));
 }
 
     public function show_results($userName) {
@@ -76,7 +96,7 @@ class HomeController extends Controller
         $users = DB::table('users')
             ->orderBy('id', 'DESC')
             ->select('id', 'users.name')
-            ->where('users.name','like','%'.$userName.'%')
+            ->where('users.name', 'like', '%'.$userName.'%')
             ->take(10)
             ->get();
 

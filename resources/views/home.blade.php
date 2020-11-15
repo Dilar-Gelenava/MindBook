@@ -8,7 +8,7 @@
         <div class="container" style="margin-top: 30px; border-radius: 15px; max-width: 600px; color: transparent;">
 
             @isset($user_name)
-                <h1 style="text-align: center">{{ $user_name }}'s Posts</h1>
+                <h1 style="text-align: center">{{ $user_name }}(ი)-ს პოსტები</h1>
             @endisset
 
             @foreach($posts as $post)
