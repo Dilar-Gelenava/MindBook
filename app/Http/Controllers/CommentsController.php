@@ -39,6 +39,10 @@ class CommentsController extends Controller
      */
     public function store_comment(Request $request)
     {
+        $request->validate([
+            'comment' => 'string|required',
+        ]);
+
         Comments::create([
             "user_id"=>auth()->user()->id,
             "post_id"=>$request->input("postId"),

@@ -15,6 +15,26 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/index_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&family=Roboto&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,300&family=Rajdhani:wght@500&family=Roboto&family=Squada+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Recursive:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&family=Roboto&family=Squada+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+
+
     <link rel="stylesheet" type="text/css" href="../css/main.css">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -63,28 +83,6 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                @auth
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="navbar-brand" href="/profile/{{ Auth::user()->id }}"> ჩემი პროფილი </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="navbar-brand" href="/{{ 'posts/'.Auth::user()->id }}"> ჩემი პოსტები </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="navbar-brand" href="{{ route('messages') }}"> წერილები </a>
-                    </li>
-                    <li>
-                        <form action="{{ route('search') }}" method="POST">
-                            @csrf
-                            <label>
-                                <input type="text" name="userName" placeholder="ძებნა Mindbook-ზე...">
-                            </label>
-                            <button class="btn btn-success"> ძიება </button>
-                        </form>
-                    </li>
-                </ul>
-                @endauth
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
                     @guest

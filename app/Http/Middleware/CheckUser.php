@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\User;
 use App\Posts;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -13,11 +14,11 @@ class CheckUser
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $post_id = $request->input("postId");
         $user_id = Posts::where('id', $post_id)

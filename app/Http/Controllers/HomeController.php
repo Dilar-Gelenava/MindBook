@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Followers;
 use App\Likes;
+use App\Posts;
 use App\User;
 use App\UserData;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use App\Posts;
-use App\Comments;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -31,6 +30,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        $panel_data = $this->get_panel_data();
 
         $posts = DB::table('posts')
             ->orderBy('id', 'DESC')
@@ -81,8 +82,9 @@ class HomeController extends Controller
 
         }
 
-        return view("home", [
+        return view("content.posts", [
             'posts' => $posts,
+            'panel_data' => $panel_data,
         ]);
 
     }
@@ -93,6 +95,8 @@ class HomeController extends Controller
 
     public function show_results($userName) {
 
+        $panel_data = (new HomeController)->get_panel_data();
+
         $users = DB::table('users')
             ->orderBy('id', 'DESC')
             ->select('id', 'users.name')
@@ -102,22 +106,58 @@ class HomeController extends Controller
 
 
         foreach ($users as $user) {
-            $user_avatar = DB::table('user_data')
+            $user->age = '';
+            $user_data = DB::table('user_data')
                 ->orderBy('id', 'DESC')
-                ->select('profile_picture_url')
                 ->where('user_id', $user->id)
                 ->first();
-            if (!empty($user_avatar)) {
-                $user->avatar = '/'.$user_avatar->profile_picture_url;
+            if (!empty($user_data)) {
+                $user->avatar = '/'.$user_data->profile_picture_url;
+                if($user_data->birthday != Null) {
+                    $user->age = Carbon::parse($user_data->birthday)->age.' years old';
+                }
             } else {
                 $user->avatar = 'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg';
             }
         }
 
-        return view('search_results', [
+        return view('content.search_results', [
             'users' => $users,
+            'panel_data' => $panel_data,
         ]);
 
+    }
+
+    public function get_panel_data() {
+        $panel_data = UserData::where('user_id', auth()->id())->first();
+
+        if (empty($panel_data)) {
+            UserData::create([
+                "user_id" => auth()->id(),
+            ]);
+            $panel_data = UserData::where('user_id', auth()->id())->first();
+        }
+
+        $panel_data->members_online = count(DB::table('users')->get());
+        $panel_data->user_followers = DB::table('followers')
+            ->orderBy('id', 'desc')
+            ->join('users', 'users.id', '=', 'followers.follower_id')
+            ->where('followers.following_id', auth()->id())
+            ->select('users.name', 'users.id')
+            ->take(9)
+            ->get();
+        $panel_data->followers_count = count(DB::table('followers')
+            ->where('following_id', auth()->id())
+            ->get());
+        $panel_data->following_count = count(DB::table('followers')
+            ->where('follower_id', auth()->id())
+            ->get());
+
+        $panel_data->user_posts_count = Posts::all()->where('user_id', auth()->id())->count();
+
+        $panel_data->posts_count = Posts::all()->count();
+
+        return $panel_data;
     }
 
 }

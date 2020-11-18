@@ -1,0 +1,139 @@
+.page-wrappers{
+	margin-top:55px;
+	width: 20vw;
+	height:calc(100vh - 55px);
+	overflow-y: scroll;
+	overflow-x: hidden;
+	background: #242526;
+}
+.left-menu{
+	background: #242526;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #242526;
+	border:solid 1px #3a3b3c;
+ 
+
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #242526; 
+	border:solid 1px #3a3b3c;
+
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #242526; 
+}
+
+.contacts-list{
+	margin-top:65px;
+}
+.chats-text-div{
+	position: fixed;
+	border:solid 1px #3a3b3c;
+	width:20vw;
+	margin-bottom: 10vh;
+	padding-top:10px;
+	padding-bottom: 10px;
+	background: #242526;
+	padding-left: 20px;
+}
+.contacts-text{
+	justify-content: flex-start;
+	align-content: center;
+	align-items: center;
+	overflow-y:auto;
+	height: 100%;
+	font-size: 27px;
+	font-family: inherit;
+	font-weight: bold;
+	color:#ffffff;
+}
+
+.contact-info{
+	display: flex;
+	flex-direction: row;
+	text-align: center;
+	margin:10px;
+	border-radius: 10px;
+}
+.contact-info img{
+	width:50px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 50%;
+}
+.contact-info button{
+	background:#242526;
+	outline: none !important;
+	border-radius: 10px;
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	border: none;
+	text-align: center;
+	float:left;
+	font-size: 20px;
+	color:#ececec;	
+}
+.contact-info button:hover{
+	background:#18191a;
+	outline: none !important;
+	border-radius: 10px;
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	border: none;
+	text-align: center;
+	float:left;
+	font-size: 20px;
+	color:#ececec;	
+}
+.contact-info button:focus{
+	background:#18191a;
+	outline: none !important;
+	border-radius: 10px;
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	border: none;
+	text-align: center;
+	float:left;
+	font-size: 20px;
+	color:#ececec;	
+}
+
+.text{
+	float:left;
+	font-size: 16px;
+	font-family: inherit;
+	font-weight: 400;
+	color:white;
+}
+.text img{
+	margin-right: 7px;
+}
+
+/*LEFT MENU*/
+
+@media only screen and (max-width: 220px) {
+  .text {
+  	display: flex;
+  	justify-content: center;
+    visibility: hidden;
+  }
+  .text img{
+  	visibility: visible;
+  }
+}

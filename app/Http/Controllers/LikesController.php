@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Comments;
 use App\Likes;
 use App\Posts;
 use Exception;
@@ -11,7 +10,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LikesController extends Controller
 {
@@ -44,6 +42,9 @@ class LikesController extends Controller
      */
     public function store_like(Request $request)
     {
+        $request->validate([
+            'is_like' => 'boolean|required',
+        ]);
 
         $like = Likes::all()
             ->where('post_id', $request->input("postId"))

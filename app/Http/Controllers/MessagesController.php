@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contacts;
 use App\Messages;
+use App\User;
 use App\UserData;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -40,7 +41,7 @@ class MessagesController extends Controller
             }
         }
 
-        return view('messages', [
+        return view('messenger.messenger', [
             'contacts' => $contacts,
         ]);
 
@@ -80,6 +81,7 @@ class MessagesController extends Controller
     public function chat(Request $request)
     {
         $contact_id = $request->input('contactId');
+        $contact_name = User::where('id', $contact_id)->first()->name;
         $messages = DB::table('messages')
             ->whereIn('sender_id', [auth()->id(), $contact_id])
             ->whereIn('receiver_id', [auth()->id(), $contact_id])
@@ -87,14 +89,20 @@ class MessagesController extends Controller
         if (count($messages) > 10) {
             Messages::where('id', $messages->first()->id)->delete();
         }
-        return view('content.chat', [
+        return view('messenger.chat', [
             'messages' => $messages,
             'contact_id' => $contact_id,
+            'contact_name' => $contact_name,
         ]);
     }
 
     public function send(Request $request)
     {
+
+        $request->validate([
+            'messageText' => 'string|required',
+        ]);
+
         $sender_id = auth()->id();
         $receiver_id = $request->input('receiverId');
         $message_text = $request->input('messageText');
@@ -113,4 +121,13 @@ class MessagesController extends Controller
 
         return redirect()->back();
     }
+
+    public function contact_info($userId) {
+
+        $user_data = UserData::where("user_id", $userId)->first();
+        $user_data->user_name = User::where('id', $userId)->first()->name;
+        return view('messenger.contact_info', ['user_data' => $user_data]);
+
+    }
+
 }

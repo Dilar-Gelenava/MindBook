@@ -8,8 +8,6 @@
     <title>Document</title>
 </head>
 <body>
-    @foreach($posts as $post)
-        <p>{{ $post->user_id }}</p>
-    @endforeach
+    <h1 style="text-align: center; color: red;">Post Deleted Successfully (id: {{ $post_id }})</h1>
 </body>
 </html>

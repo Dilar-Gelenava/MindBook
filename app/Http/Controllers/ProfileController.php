@@ -31,7 +31,6 @@ class ProfileController extends Controller
 
         $user_name = User::where('id', $userId)->firstOrFail()->name;
 
-
         $user = DB::table('users')->where('id', $userId)->where('name', $user_name)->first();
 
         $user_data = UserData::where('user_id', $userId)->first();
@@ -99,7 +98,7 @@ class ProfileController extends Controller
             ->where('contact_id', $userId)
             ->first());
 
-        return view("profile", [
+        return view("content.profile", [
             'user_followers' => $user_followers,
             'user_follows' => $user_follows,
             'following' => $following,
@@ -133,6 +132,16 @@ class ProfileController extends Controller
      */
     public function store_user_data(Request $request)
     {
+        $request->validate([
+            'userName' => 'required|string|max:255',
+            'firstName' => 'string|max:20',
+            'lastName' => 'string|max:20',
+            'bio' => 'string|max:1000',
+            'birthday' => 'date',
+            'address' => 'string|max:100',
+            'gender' => 'boolean',
+            'image' => 'mimes:jpeg,png|max:10240',
+        ]);
 
         if($request->hasFile('image'))
         {

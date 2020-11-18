@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use Carbon\Carbon;
 
 
 App::make('files')->link(storage_path('app/public'), public_path('storage'));
@@ -58,4 +57,8 @@ Route::get('/search/{userName}', 'HomeController@show_results')->middleware('aut
 Route::get('/messages/chat', 'MessagesController@chat')->middleware('auth')->name('chat');
 
 Route::post('/messages/send', 'MessagesController@send')->middleware('auth')->name('send');
+
+Route::get('/iframe/{postId}', 'PostsController@iframe_post')->name('iframePost');
+
+Route::get('/info/{postId}', 'MessagesController@contact_info')->name('contactInfo');
 
