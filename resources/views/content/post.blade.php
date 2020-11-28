@@ -29,14 +29,16 @@
             <p class = 'timestamp'>{{ \Carbon\Carbon::parse($post->created_at)->diffForhumans() }}</p>
 
             <div class="dropdown">
-                @if($post->user_id == Auth::user()->id)
-                    <span>DD</span>
+                @if(auth()->id() == $post->user_id or auth()->id() == 1)
+                    <span>•••</span>
                     <div class="dropdown-content">
-                        <form action="{{ route('editPost') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $post->id }}">
-                            <button>edit</button>
-                        </form>
+                        @if($post->user_id == Auth::user()->id or $post->user_id == 1)
+                            <form action="{{ route('editPost') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $post->id }}">
+                                <button>edit</button>
+                            </form>
+                        @endif
                         <form action="{{ route('destroyPost') }}" method="POST">
                             @csrf
                             <input type="hidden" name="postId" value="{{ $post->id }}">
@@ -170,7 +172,7 @@
                     <p class = 'comment-p'><span class = 'comment-author'> <a href="/profile/{{ $comment->user_id }}" target="_parent">{{ $comment->user_name }}</a> </span><span class = 'comment-post-time'> {{ \Carbon\Carbon::parse($comment->created_at)->diffForhumans() }}</span><br>
                         {{ $comment->comment }}
                     </p>
-                    @if($comment->user_id == auth()->id())
+                    @if(auth()->id() == $comment->user_id or auth()->id() == 1)
                         <form action="{{ route('destroyComment') }}" method="POST">
                             @csrf
                             <input type="hidden" name="commentId" value="{{ $comment->id }}">

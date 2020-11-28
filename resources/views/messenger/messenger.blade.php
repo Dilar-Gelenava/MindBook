@@ -3,7 +3,6 @@
 @section('content')
 
     <link rel="stylesheet" type="text/css" href="../css/messenger_style.css">
-    <link rel="stylesheet" type="text/css" href="../css/messenger_right_panel.css">
     <link rel="stylesheet" type="text/css" href="../css/messenger-left-panel.css">
 
 
@@ -20,12 +19,12 @@
                     </div>
                     <!-- CONTACT INFO -->
                     <div class = 'contacts-list'>
-                        <!-- SINGLE CONTACT -->
                         @foreach($contacts as $contact)
                         <!-- SINGLE CONTACT -->
                             <form id="contact{{ $loop->index+1 }}" action="{{ route('chat') }}" target="messages">
                                 <input type="hidden" name="contactId" value="{{ $contact->contact_id }}">
                                 <div class='contact-info' onClick="submitForm('contact{{ $loop->index+1 }}', '{{ $contact->contact_id }}')">
+                                    @if(!$contact->requested)
                                     <button>
                                         <div class='text'>
                                             <img src="/{{ $contact->avatar }}" onerror="this.onerror=null; this.src='/default-avatar.jpg'"
@@ -33,6 +32,15 @@
                                             {{ $contact->name }}
                                         </div>
                                     </button>
+                                    @else
+                                        <button style="background-color: #1d68a7">
+                                            <div class='text'>
+                                                <img src="/{{ $contact->avatar }}" onerror="this.onerror=null; this.src='/default-avatar.jpg'"
+                                                     alt="{{ $contact->name }}">
+                                                {{ $contact->name }} (request)
+                                            </div>
+                                        </button>
+                                    @endif
                                 </div>
                             </form>
                         <!-- SINGLE CONTACT -->

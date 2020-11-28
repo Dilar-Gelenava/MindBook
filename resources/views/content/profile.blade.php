@@ -29,19 +29,24 @@
                                 </form>
                             </li>
                             <li class = 'edit-profile-li'>
-                                <form action="{{ route('addContact') }}" method="POST">
+                                <form id="add_contact_form" action="{{ route('addContact') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="contactId" value="{{ $user_id }}">
-                                    @if($in_contacts)
-                                        <button onclick="confirmRemoveContact()">
-                                            Rem. Cont.
-                                        </button>
-                                    @else
+                                </form>
+                                @csrf
+                                @if($in_contacts)
+                                    <button onclick="confirmRemoveContact()">
+                                        Rem. Cont.
+                                    </button>
+                                @else
+                                    <form action="{{ route('addContact') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="contactId" value="{{ $user_id }}">
                                         <button>
                                             Add. Cont.
                                         </button>
-                                    @endif
-                                </form>
+                                    </form>
+                                @endif
                             </li>
                         @else
                             <li class = 'edit-profile-li'>
@@ -279,7 +284,9 @@
         }
 
         function confirmRemoveContact() {
-            confirm("It will delete all messages with this person, continue?");
+            if (confirm("It will delete all messages with this person, continue?")) {
+                document.getElementById('add_contact_form').submit();
+            }
         }
 
         function showEdit() {

@@ -2,25 +2,29 @@ body{
 	overflow-x:hidden;
 	overflow-y:auto;
 }
+
 /* width */
+/*::-webkit-scrollbar {*/
+/*    width: 10px;*/
+/*}*/
 ::-webkit-scrollbar {
-  width: 5px;
+    display: none;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #242526;
-}
+/*!* Track *!*/
+/*::-webkit-scrollbar-track {*/
+/*    background: #f1f1f1;*/
+/*}*/
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #242526;
-}
+/*!* Handle *!*/
+/*::-webkit-scrollbar-thumb {*/
+/*    background: #888;*/
+/*}*/
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #242526;
-}
+/*!* Handle on hover *!*/
+/*::-webkit-scrollbar-thumb:hover {*/
+/*    background: #555;*/
+/*}*/
 
 
 .chat-menu{
@@ -115,17 +119,15 @@ body{
 }
 
 .chatting-stranger img{
-	width:35px;
+	width: 35px;
 	height: 35px;
 	object-fit: cover;
 	border-radius: 50%;
 }
 
-
-
-
 .chat-input-footer-wrapper{
-	margin-top:76px;
+	margin-top: 76px;
+    padding-top: 50px;
 }
 
 .chat-input-footer{

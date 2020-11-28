@@ -27,54 +27,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="09b1cc36-ce14-49ca-a2e6-39d247dd537e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/css/index_style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/css/messenger-left-panel.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/css/messenger_chat_style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/css/messenger_right_panel.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/css/messenger_style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/css/registration.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/css/reset.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/comment_button.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/comment_button_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/like_button.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/like_button_blue.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/img/share_button.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/content/deleted_post.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/content/posts.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/content/profile.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/content/search_results.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/content/view_post.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/layouts/panels.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/main/base.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/main/index.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/messenger/chat.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/messenger/contact_info.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/messenger/messenger.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/seeds/AdminSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CommentsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CommentsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/LikesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/LikesController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/MessagesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/MessagesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PostsController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProfileController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Middleware/CheckUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/CheckUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/main.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/content/chat.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/index_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/index_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/messenger_chat_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/messenger_chat_style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/content/post.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/content/post.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/forms/add_post.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/forms/edit_post.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/forms/edit_post.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/view_post.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/messages.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/profile.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/search_results.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/test.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.php" beforeDir="false" afterPath="$PROJECT_DIR$/server.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Feature/ExampleTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/ExampleTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Unit/ExampleTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Unit/ExampleTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/content/profile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/content/profile.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/messenger/chat.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/messenger/chat.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/messenger/messenger.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/messenger/messenger.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -262,6 +225,13 @@
       <workItem from="1605621071593" duration="31401000" />
       <workItem from="1605715930406" duration="623000" />
       <workItem from="1605716626744" duration="6165000" />
+      <workItem from="1605780853702" duration="1256000" />
+      <workItem from="1606148777923" duration="5000" />
+      <workItem from="1606399345098" duration="3398000" />
+      <workItem from="1606406427510" duration="11166000" />
+      <workItem from="1606482630820" duration="1319000" />
+      <workItem from="1606501476169" duration="1636000" />
+      <workItem from="1606569936234" duration="6638000" />
     </task>
     <servers />
   </component>

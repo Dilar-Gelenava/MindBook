@@ -28,7 +28,34 @@ class MessagesController extends Controller
             ->join('users', 'users.id', '=', 'contacts.contact_id')
             ->select('users.*', 'contacts.user_id', 'contacts.contact_id')
             ->where('contacts.user_id', auth()->id())
-            ->get();
+            ->get()
+            ->toArray();
+
+        foreach ($contacts as $contact) {
+            $contact->requested = 0;
+        }
+
+        $other_contacts = DB::table('contacts')
+            ->orderBy('contacts.last_message_id', 'DESC')
+            ->join('users', 'users.id', '=', 'contacts.user_id')
+            ->select('users.*', 'contacts.user_id as contact_id', 'contacts.contact_id as user_id')
+            ->where('contacts.contact_id', auth()->id())
+            ->get()
+            ->toArray();
+
+        $message_requests = array();
+        foreach ($other_contacts as $other_contact) {
+            $not_in_contacts = empty(DB::table('contacts')
+                ->where('user_id', auth()->id())
+                ->where('contact_id', $other_contact->contact_id)
+                ->first());
+            if ($not_in_contacts) {
+                $other_contact->requested = 1;
+                array_push($message_requests, $other_contact);
+            }
+        }
+
+        $contacts = array_merge($contacts, $message_requests);
 
         foreach ($contacts as $contact) {
             $avatar = UserData::all()
@@ -86,7 +113,7 @@ class MessagesController extends Controller
             ->whereIn('sender_id', [auth()->id(), $contact_id])
             ->whereIn('receiver_id', [auth()->id(), $contact_id])
             ->get();
-        if (count($messages) > 10) {
+        if (count($messages) > 20) {
             Messages::where('id', $messages->first()->id)->delete();
         }
         return view('messenger.chat', [

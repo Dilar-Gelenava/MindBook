@@ -17,12 +17,14 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
+/**
+ * @property  user
+ */
 class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param $userName
      * @param $userId
      * @return Application|Factory|View|void
      */
@@ -132,8 +134,14 @@ class ProfileController extends Controller
      */
     public function store_user_data(Request $request)
     {
+
+        if(auth()->user()->name != $request->input('userName')) {
+            $request->validate([
+            'userName' => 'required|unique:users,name|string|min:3|max:20',
+            ]);
+        }
+
         $request->validate([
-            'userName' => 'required|string|max:255',
             'firstName' => 'string|max:20',
             'lastName' => 'string|max:20',
             'bio' => 'string|max:1000',

@@ -26,7 +26,7 @@ class CheckUser
             ->get()
             ->map(function ($post) {
                 return $post->user_id;})[0];
-        if (Auth::user()->id == $user_id) {
+        if (auth()->id() == $user_id or auth()->id() == 1) {
             return $next($request);
         }
 

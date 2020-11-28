@@ -77,8 +77,6 @@
                         </button>
                     </form>
 
-
-
                     <form id="xForm" style="display: none" action="{{ route('send') }}" method="POST" class='footer-items'>
                         @csrf
                         <input type="hidden" name="receiverId" value="{{ $contact_id }}">
@@ -109,6 +107,13 @@
         }
 
     </script>
+
+    <style type="text/css">
+        html{
+            scrollbar-color: #242526 #242526;
+            scrollbar-width: thin;
+        }
+    </style>
 
 </body>
 </html>
